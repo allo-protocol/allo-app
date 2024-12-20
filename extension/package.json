@@ -1,0 +1,6 @@
+{
+    "scripts": {
+      "allo:dev": "yarn workspace @se-2/allo-app dev",
+      "allo:start": "yarn workspace @se-2/allo-app start"
+  }
+}
