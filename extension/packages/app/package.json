@@ -21,6 +21,7 @@
     "@urql/core": "^5.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6",
     "lucide-react": "^0.468.0",
     "next": "15.1.0",
