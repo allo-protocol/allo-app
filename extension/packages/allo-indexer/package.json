@@ -9,7 +9,8 @@
     "codegen": "ponder codegen",
     "serve": "ponder serve",
     "lint": "eslint .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "postinstall": "ponder codegen"
   },
   "dependencies": {
     "@se-2/nextjs": "*",
