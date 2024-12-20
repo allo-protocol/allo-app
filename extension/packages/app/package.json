@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "@se-2/allo-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
