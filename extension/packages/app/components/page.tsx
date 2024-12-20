@@ -13,9 +13,9 @@ export function Page({
 }>) {
   return (
     <>
-      <div className="mb-2 flex items-center gap-2">
+      <div className="mb-2 h-10 flex items-center gap-2">
         {backLink && <BackButton href={backLink} />}
-        <h1 className="w-full font-semibold">{title}</h1>
+        <h1 className="w-full font-semibold text-lg">{title}</h1>
 
         {actions}
       </div>

@@ -6,8 +6,7 @@ import { WagmiProvider } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-import { wagmiConfig } from "../../nextjs/services/web3/wagmiConfig";
-
+import { wagmiConfig } from "@se-2/nextjs/services/web3/wagmiConfig";
 export const queryClient = new QueryClient();
 
 export function Providers(props: PropsWithChildren) {

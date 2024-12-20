@@ -5,7 +5,9 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { ConnectButton } from "~/components/connect-button";
 import Link from "next/link";
+import { Toaster } from "~/components/ui/toaster";
 import { Button } from "~/components/ui/button";
+import { FaucetButton } from "~/components/faucet-button";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,11 +44,18 @@ export default function RootLayout({
                 <Link href="/">
                   <Button variant={"link"}>Discover Grants</Button>
                 </Link>
+                <Link href="/grant/create">
+                  <Button variant={"link"}>Create Grant</Button>
+                </Link>
               </div>
-              <ConnectButton />
+              <div className="flex gap-1">
+                <ConnectButton />
+                <FaucetButton />
+              </div>
             </header>
             <div className="p-2">{children}</div>
           </main>
+          <Toaster />
         </Providers>
       </body>
     </html>

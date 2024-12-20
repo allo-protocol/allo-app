@@ -1,29 +1,23 @@
 "use client";
-
-import { useQuery } from "@tanstack/react-query";
-import { generatePrivateKey, privateKeyToAddress } from "viem/accounts";
+import { useIndexer, Variables } from "./use-indexer";
+import { PROJECTS_SCHEMA } from "~/queries";
 
 export type Grant = {
   address: string;
-  name: string;
+  metadata: {
+    title: string;
+  };
 };
 
-const grants = Array.from({ length: 12 })
-  .fill(0)
-  .map((_, i) => ({
-    name: `Grant #${i + 1}`,
-    address: privateKeyToAddress(generatePrivateKey()),
-  }));
-
-type QueryFilter = {
-  first?: number;
-  skip?: number;
-  where?: {};
-};
-export function useGrants(query: QueryFilter) {
-  const { first = 12, skip = 0 } = query;
-  return useQuery({
-    queryKey: ["grants", query],
-    queryFn: async () => grants.slice(skip, first + skip),
+export function useGrants(variables: Variables) {
+  console.log("vars", variables);
+  return useIndexer<Grant>({
+    queryKey: ["grants", variables],
+    variables,
+    query: PROJECTS_SCHEMA,
+    queryFn: async (r) => {
+      console.log(r);
+      return r.projects;
+    },
   });
 }
