@@ -4,7 +4,7 @@ Allo App gets you up and running building Allocation Strategies in no time!
 
 ## Installation
 
-`npx create-eth@latest -e allocapital/allo-app`
+`npx create-eth@latest -e allocapital/allo-kit`
 
 ## Getting Started
 
