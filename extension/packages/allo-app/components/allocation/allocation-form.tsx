@@ -72,8 +72,8 @@ export function AllocationForm({ strategyAddress, tokenAddress }: { strategyAddr
           Reset Cart
         </Button>
         <AllowanceCheck amount={cart.sum} tokenAddress={tokenAddress} spenderAddress={strategyAddress}>
-          <Button type="submit" disabled={!cart.list.length} isLoading={allocate.isPending}>
-            Fund
+          <Button className="w-48" type="submit" disabled={!cart.list.length} isLoading={allocate.isPending}>
+            Transfer tokens
           </Button>
         </AllowanceCheck>
       </div>
