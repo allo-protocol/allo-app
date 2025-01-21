@@ -4,11 +4,11 @@ import { useCart } from "~/components/cart/use-cart";
 import { IndexerQuery } from "~/hooks/use-indexer";
 import { Grid } from "../grid";
 import { RegistrationCard } from "./registration-card";
-import { useRegistrations } from "./use-register";
+import { useProjects } from "./use-register";
 
 export function ProjectsList({ query }: { query: IndexerQuery }) {
   const cart = useCart();
-  const { data, error, isPending } = useRegistrations(query);
+  const { data, error, isPending } = useProjects(query);
 
   return (
     <Grid
@@ -16,17 +16,12 @@ export function ProjectsList({ query }: { query: IndexerQuery }) {
       data={data?.items}
       error={error}
       isPending={isPending}
-      renderItem={(project) => (
+      renderItem={project => (
         <RegistrationCard
           key={project.address}
           {...project}
           inCart={cart.contains(project.address)}
-          onSelect={() =>
-            cart.set(
-              project.address,
-              cart.contains(project.address) ? undefined : 0
-            )
-          }
+          onSelect={() => cart.set(project.address, cart.contains(project.address) ? undefined : 0)}
         />
       )}
     />

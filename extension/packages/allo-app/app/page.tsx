@@ -15,9 +15,7 @@ export default function Home() {
       title="Discover Projects"
       actions={
         <Link href={`/checkout`}>
-          <Button
-            disabled={!cart.list.length}
-          >{`Add ${cart.list.length} to cart`}</Button>
+          <Button disabled={!cart.list.length}>{`Add ${cart.list.length} to cart`}</Button>
         </Link>
       }
     >
@@ -27,7 +25,6 @@ export default function Home() {
           where: {
             // List approved projects for this strategy
             strategy_in: [AlloIRL?.address],
-            index: 0, // Index 0 is always the project
             isApproved: true,
           },
         }}
