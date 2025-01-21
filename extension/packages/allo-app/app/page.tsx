@@ -7,7 +7,7 @@ import { useContracts } from "~/hooks/use-contracts";
 import { ProjectsList } from "~/components/registration/projects-list";
 
 export default function Home() {
-  const { AlloIRL } = useContracts();
+  const { SimpleGrants } = useContracts();
   const cart = useCart();
 
   return (
@@ -24,7 +24,7 @@ export default function Home() {
           limit: 100,
           where: {
             // List approved projects for this strategy
-            strategy_in: [AlloIRL?.address],
+            strategy_in: [SimpleGrants?.address],
             isApproved: true,
           },
         }}

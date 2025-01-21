@@ -5,12 +5,12 @@ import { useContracts } from "~/hooks/use-contracts";
 import { RegistrationForm } from "~/components/registration/registration-form";
 
 export default function ProjectRegisterPage() {
-  const { AlloIRL } = useContracts();
+  const { SimpleGrants } = useContracts();
   const { address } = useAccount();
   return (
     <Page title="Register Project">
       <RegistrationForm
-        strategyAddress={AlloIRL?.address}
+        strategyAddress={SimpleGrants?.address}
         defaultValues={{
           address,
           metadata: {
