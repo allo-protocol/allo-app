@@ -26,7 +26,7 @@ export function RegistrationApproveButton({ id }: { id: Hex }) {
             "",
             "0x",
           ])
-          .then(() => invalidate(queryKey))
+          .then(() => invalidate([queryKey]))
       }
     >
       Approve

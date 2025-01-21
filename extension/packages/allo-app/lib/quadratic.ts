@@ -21,8 +21,6 @@ export function calculateQuadraticMatching(
 ): MatchingResult {
   // Get contributions grouped by recipient and contributor
   const contributions = getContributions(allocations);
-
-  console.log("contribs", contributions, allocations);
   const sqrtSums = Object.fromEntries(
     Object.entries(contributions).map(([recipient, contribs]) => [
       recipient,

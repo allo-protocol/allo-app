@@ -3,17 +3,17 @@
 import { useAccount, useWriteContract } from "wagmi";
 import { Address, erc20Abi, getAddress, parseUnits } from "viem";
 import { Terminal } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useToken } from "~/components/token/use-token";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 import { useWaitForEvent } from "~/hooks/use-wait-for-event";
+import { useInvalidate } from "~/hooks/use-invalidate";
 
 export function MintTokens({ tokenAddress }: { tokenAddress: Address }) {
   const { address } = useAccount();
+  const invalidate = useInvalidate();
   const waitForEvent = useWaitForEvent(erc20Abi);
   const { writeContractAsync, isPending } = useWriteContract();
-  const queryClient = useQueryClient();
 
   const { data: balance, queryKey } = useToken(tokenAddress, address);
 
@@ -27,7 +27,7 @@ export function MintTokens({ tokenAddress }: { tokenAddress: Address }) {
           <div className="flex gap-1">
             Balance:
             <div className="font-semibold">
-              {balance?.formatted} {balance?.symbol}
+              {balance?.formatted ?? "0"} {balance?.symbol}
             </div>
           </div>
           <Button
@@ -56,13 +56,13 @@ export function MintTokens({ tokenAddress }: { tokenAddress: Address }) {
                   },
                 ],
                 functionName: "mint",
-                args: [getAddress(address!), parseUnits("1000", balance?.decimals ?? 18)],
+                args: [
+                  getAddress(address!),
+                  parseUnits("1000", balance?.decimals ?? 18),
+                ],
               })
-                .then(hash => waitForEvent(hash, "Transfer"))
-                .then(logs => {
-                  console.log(logs);
-                  return queryClient.invalidateQueries({ queryKey });
-                });
+                .then((hash) => waitForEvent(hash, "Transfer"))
+                .then((logs) => invalidate([queryKey]));
             }}
           >
             Mint Tokens

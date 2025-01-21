@@ -38,11 +38,6 @@ export function RegistrationCard({
           <Link href={`/project/${project?.address}`}>
             <h3 className="hover:underline">{project?.metadata?.title}</h3>
           </Link>
-          {allocation ? (
-            <div className="text-sm">
-              Allocation: {formatNumber(allocation)}
-            </div>
-          ) : null}
           <code className="text-sm">
             <EnsName address={project?.address} />
           </code>

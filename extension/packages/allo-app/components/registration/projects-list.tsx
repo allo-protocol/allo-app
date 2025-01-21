@@ -16,12 +16,17 @@ export function ProjectsList({ query }: { query: IndexerQuery }) {
       data={data?.items}
       error={error}
       isPending={isPending}
-      renderItem={project => (
+      renderItem={(project) => (
         <RegistrationCard
           key={project.address}
           {...project}
           inCart={cart.contains(project.address)}
-          onSelect={() => cart.set(project.address, cart.contains(project.address) ? undefined : 0)}
+          onSelect={() =>
+            cart.set(
+              project.address,
+              cart.contains(project.address) ? undefined : 0
+            )
+          }
         />
       )}
     />

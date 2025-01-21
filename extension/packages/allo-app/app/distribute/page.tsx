@@ -24,35 +24,43 @@ import { calculateQuadraticMatching, getContributions } from "~/lib/quadratic";
 import { Registration } from "~/schemas";
 import { Grid } from "~/components/grid";
 import { EnsName } from "~/components/ens";
+import { AllocationsTable } from "~/components/allocation/allocations-table";
+import { useAccount } from "wagmi";
+import { useInvalidate } from "~/hooks/use-invalidate";
 
 export default function DistributePage() {
-  const { AlloIRL, ERC20Mock, VoteToken } = useContracts();
-  const { data: allocations } = useAllocations({
+  const invalidate = useInvalidate();
+  const { SimpleGrants, ERC20Mock } = useContracts();
+  const { address } = useAccount();
+  const tokenAddress = ERC20Mock.address;
+  const allocations = useAllocations({
     where: {
-      // Only fetch allocations for this strategy and only vote tokens
-      strategy_in: [AlloIRL.address],
-      tokenAddress_in: [VoteToken.address],
+      // Only fetch allocations for this strategy
+      strategy_in: [SimpleGrants.address],
+      // Not any transfers to or from this contract (fund / withdraw)
+      to_not_in: [SimpleGrants.address],
+      from_not_in: [SimpleGrants.address],
     },
   });
   const distributions = useAllocations({
     where: {
       // Only fetch allocations for this strategy and distributions of matching funds (from === strategy address)
-      strategy_in: [AlloIRL.address],
-      from_in: [AlloIRL.address],
+      strategy_in: [SimpleGrants.address],
+      from_in: [SimpleGrants.address],
     },
   });
-  const queryClient = useQueryClient();
-  const tokenAddress = ERC20Mock.address;
-  const votes = allocations?.items ?? [];
-  const voterCountById = getContributions(votes);
-  const token = useToken(tokenAddress, AlloIRL.address);
-  const distribute = useDistribute({ strategyAddress: AlloIRL.address });
+
+  const donations = allocations.data?.items ?? [];
+
+  const voterCountById = getContributions(donations);
+  const token = useToken(tokenAddress, SimpleGrants.address);
+  const distribute = useDistribute({ strategyAddress: SimpleGrants.address });
   const matchingFunds = token.data?.balance ?? BigInt(0);
-  const matching = calculateQuadraticMatching(votes, matchingFunds);
+  const matching = calculateQuadraticMatching(donations, matchingFunds);
 
   const { data: projects } = useProjects({
     where: {
-      address_in: votes.map((alloc) => alloc.registration.address),
+      address_in: donations.map((alloc) => alloc.registration?.address),
     },
   });
 
@@ -70,18 +78,15 @@ export default function DistributePage() {
 
   const isPending = distributions.isPending;
   const error = distributions.error;
-  console.log(items);
   return (
     <Page
-      title="Distribute"
+      title="Matching Funds"
       actions={
         <Button
           disabled={!matchingFunds}
           isLoading={distribute.isPending}
           onClick={() => {
             const [recipients, amounts] = buildAllocations(matching, 0);
-            console.log(matching, recipients, amounts);
-            console.log(amounts.reduce((sum, x) => sum + x, BigInt(0)));
             distribute
               .mutateAsync([
                 recipients,
@@ -90,7 +95,7 @@ export default function DistributePage() {
                 recipients.map(() => "0x"),
               ])
               .then(() => {
-                queryClient.invalidateQueries({ queryKey: token.queryKey });
+                invalidate([token.queryKey, allocations.queryKey]);
               });
           }}
         >
@@ -102,12 +107,12 @@ export default function DistributePage() {
         Add matching funds to be distributed to projects based on quadratic
         voting.
       </p>
-      <MintTokens />
+
       <div className="pb-2 mt-2 mb-4 border-b sm:flex items-center justify-between">
         Matching funds:{" "}
         <TokenAmount amount={matchingFunds} token={tokenAddress} />
         <MatchingFunds
-          strategyAddress={AlloIRL.address}
+          strategyAddress={SimpleGrants.address}
           tokenAddress={tokenAddress}
         />
       </div>
@@ -115,6 +120,7 @@ export default function DistributePage() {
       <Grid
         columns={[1]}
         data={items}
+        loadingItems={3}
         isPending={isPending}
         error={error}
         renderItem={(item, i) => (
@@ -135,6 +141,22 @@ export default function DistributePage() {
           </div>
         )}
       />
+      <AllocationsTable
+        query={{
+          where: {
+            // Only fetch allocations for this strategy
+            strategy_in: [SimpleGrants.address],
+            // Not any transfers to or from this contract (fund / withdraw)
+            to_not_in: [address!],
+            from_in: [SimpleGrants.address],
+          },
+          orderBy: "createdAt",
+          orderDirection: "desc",
+        }}
+      />
+      <div className="mt-4">
+        <MintTokens tokenAddress={tokenAddress} />
+      </div>
     </Page>
   );
 }
@@ -147,13 +169,12 @@ function MatchingFunds({
   tokenAddress: Address;
 }) {
   const querClient = useQueryClient();
-  const { AlloIRL } = useContracts();
+  const { SimpleGrants } = useContracts();
   const [value, setValue] = useState<string>("");
   const fund = useDeposit({ strategyAddress });
   const withdraw = useWithdraw({ strategyAddress });
-  const token = useToken(tokenAddress, AlloIRL.address);
+  const token = useToken(tokenAddress, SimpleGrants.address);
 
-  console.log(token.data);
   return (
     <form
       className="flex gap-1"
@@ -181,7 +202,7 @@ function MatchingFunds({
         spenderAddress={strategyAddress}
         tokenAddress={tokenAddress}
       >
-        <Button type="submit" variant={"secondary"} disabled={!value}>
+        <Button type="submit" disabled={!value}>
           Add matching funds
         </Button>
       </AllowanceCheck>

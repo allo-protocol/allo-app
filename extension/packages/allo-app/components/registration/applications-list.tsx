@@ -7,7 +7,6 @@ import { ApproveItem } from "./approve-item";
 
 export function ApplicationsList({ query }: { query: IndexerQuery }) {
   const { data, error, isPending } = useRegistrations(query);
-  console.log(data);
   return (
     <Grid
       columns={[1]}

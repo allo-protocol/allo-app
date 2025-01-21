@@ -45,7 +45,6 @@ export function buildAllocations(
   cartItems: Record<string, bigint | number | undefined>,
   decimals = 18
 ): [Address[], bigint[]] {
-  console.log(cartItems, decimals);
   return Object.entries(cartItems).reduce(
     ([recipients, amounts], [address, allocation]) =>
       (allocation ?? 0) > 0

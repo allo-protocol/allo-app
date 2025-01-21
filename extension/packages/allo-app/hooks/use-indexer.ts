@@ -17,7 +17,9 @@ type AllocationWhere = {
   amount_gt?: number;
   amount_lt?: number;
   from_in?: Address[];
+  from_not_in?: Address[];
   to_in?: Address[];
+  to_not_in?: Address[];
   tokenAddress_in?: Address[];
   strategy_in?: Address[];
 };
@@ -60,7 +62,6 @@ export function useIndexer<T>({
         ?.query(query, variables)
         .toPromise()
         .then((r) => {
-          console.log(r);
           if (r.error) throw new Error(r.error.message);
           return queryFn(r.data);
         });

@@ -14,7 +14,13 @@ import { useProjects } from "../registration/use-register";
 import { Grid } from "../grid";
 import { Registration } from "~/schemas";
 
-export function AllocationForm({ strategyAddress, tokenAddress }: { strategyAddress: Address; tokenAddress: Address }) {
+export function AllocationForm({
+  strategyAddress,
+  tokenAddress,
+}: {
+  strategyAddress: Address;
+  tokenAddress: Address;
+}) {
   const { address } = useAccount();
   const token = useToken(tokenAddress, address);
   const cart = useCart();
@@ -22,14 +28,16 @@ export function AllocationForm({ strategyAddress, tokenAddress }: { strategyAddr
   const projects = useProjects({
     where: { address_in: Object.keys(cart.items) as Address[] },
   });
-
   const error = projects.error || allocate.error;
   return (
     <form
       className="space-y-2"
-      onSubmit={async e => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        const [recipients, amounts] = buildAllocations(cart.items, token.data?.decimals);
+        const [recipients, amounts] = buildAllocations(
+          cart.items,
+          token.data?.decimals
+        );
 
         allocate
           .mutateAsync([
@@ -57,7 +65,7 @@ export function AllocationForm({ strategyAddress, tokenAddress }: { strategyAddr
             key={project?.address}
             {...project}
             value={cart.items[project?.address as Address]}
-            onUpdate={value => cart.set(project?.address, value)}
+            onUpdate={(value) => cart.set(project?.address, value)}
             onRemove={() => () => cart.set(project.address)}
           />
         )}
@@ -65,14 +73,25 @@ export function AllocationForm({ strategyAddress, tokenAddress }: { strategyAddr
 
       <div className="flex justify-end items-center gap-4">
         <div className="">
-          <span className="text-gray-600 text-sm uppercase tracking-wider">Total: </span>
+          <span className="text-gray-600 text-sm uppercase tracking-wider">
+            Total:{" "}
+          </span>
           {formatNumber(Number(cart.sum))} / {token.data?.formatted}
         </div>
         <Button type="button" variant="outline" onClick={() => cart.reset()}>
           Reset Cart
         </Button>
-        <AllowanceCheck amount={cart.sum} tokenAddress={tokenAddress} spenderAddress={strategyAddress}>
-          <Button className="w-48" type="submit" disabled={!cart.list.length} isLoading={allocate.isPending}>
+        <AllowanceCheck
+          amount={cart.sum}
+          tokenAddress={tokenAddress}
+          spenderAddress={strategyAddress}
+        >
+          <Button
+            className="w-48"
+            type="submit"
+            disabled={!cart.list.length}
+            isLoading={allocate.isPending}
+          >
             Transfer tokens
           </Button>
         </AllowanceCheck>
@@ -105,7 +124,9 @@ function AllocationItem({
         type="number"
         min={0}
         value={value}
-        onChange={e => onUpdate(e.target.value ? Number(e.target.value) : undefined)}
+        onChange={(e) =>
+          onUpdate(e.target.value ? Number(e.target.value) : undefined)
+        }
       />
       <Button
         className="absolute top-2 right-2"

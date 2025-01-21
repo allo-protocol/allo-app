@@ -1,6 +1,13 @@
 "use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
 import { IndexerQuery } from "~/hooks/use-indexer";
 import { useAllocations } from "~/components/allocation/use-allocate";
 import { TokenAmount } from "../token/token-amount";
@@ -13,16 +20,23 @@ export function AllocationsTable({ query }: { query: IndexerQuery }) {
       <TableHeader>
         <TableRow>
           <TableHead>Amount</TableHead>
+          <TableHead>To</TableHead>
           <TableHead>From</TableHead>
           <TableHead>Date</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {allocations?.items.map(allocation => (
+        {allocations?.items.map((allocation) => (
           <TableRow key={allocation.id}>
             <TableCell>
-              <TokenAmount amount={allocation.amount} token={allocation.token.address!} />
+              <TokenAmount
+                amount={allocation.amount}
+                token={allocation.token.address!}
+              />
             </TableCell>
+            <TableCell>
+              <EnsName address={allocation.to} />
+            </TableCell>{" "}
             <TableCell>
               <EnsName address={allocation.from} />
             </TableCell>

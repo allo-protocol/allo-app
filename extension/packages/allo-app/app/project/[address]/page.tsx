@@ -23,7 +23,8 @@ export default function ProjectDetailsPage() {
     <Page
       title={
         <div className="flex gap-2 items-center">
-          {project?.metadata?.title!} <ApprovedBadge isApproved={project?.isApproved} />
+          {project?.metadata?.title!}{" "}
+          <ApprovedBadge isApproved={project?.isApproved} />
         </div>
       }
       actions={
@@ -39,7 +40,10 @@ export default function ProjectDetailsPage() {
         </div>
       }
     >
-      <BackgroundImage src={project?.metadata.image} className="h-40 bg-gray-200" />
+      <BackgroundImage
+        src={project?.metadata.image}
+        className="h-40 bg-gray-200"
+      />
       <div className="py-8">{project?.metadata.description}</div>
 
       <h3 className=" font-semibold">Allocations</h3>
@@ -56,6 +60,8 @@ export default function ProjectDetailsPage() {
 
 function ApprovedBadge({ isApproved }: { isApproved?: boolean }) {
   return typeof isApproved === "undefined" ? null : (
-    <Badge variant={isApproved ? "success" : "outline"}>{isApproved ? "Approved" : "Pending"}</Badge>
+    <Badge variant={isApproved ? "success" : "outline"}>
+      {isApproved ? "Approved" : "Pending"}
+    </Badge>
   );
 }
