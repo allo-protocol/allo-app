@@ -19,7 +19,7 @@ export type Allocation = {
   amount: number;
   from: Address;
   to: Address;
-  token: { symbol: string };
+  token: { symbol: string; address: Address; decimals: number };
   registration: { address: Address };
   createdAt: number;
 };
