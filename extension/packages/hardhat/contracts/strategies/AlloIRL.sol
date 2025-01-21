@@ -6,10 +6,10 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import {Allocator} from "./extensions/Allocator.sol";
-import {Registry, IRegistry} from "./extensions/Registry.sol";
-import {MerkleClaim} from "./extensions/MerkleClaim.sol";
-import {Strategy} from "./base/Strategy.sol";
+import {Allocator} from "../extensions/Allocator.sol";
+import {Registry, IRegistry} from "../extensions/Registry.sol";
+import {MerkleClaim} from "../extensions/MerkleClaim.sol";
+import {Strategy} from "../base/Strategy.sol";
 
 /**
  * A simple Strategy contract for quadratic voting on projects and distribution

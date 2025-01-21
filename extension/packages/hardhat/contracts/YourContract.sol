@@ -16,6 +16,6 @@ contract SimpleGrants is Strategy, Allocator, Registry, Ownable {
 
     function register(address project, string memory metadataURI, bytes memory data) public override {
         _register(project, metadataURI, data);
-        _approve(project, "", ""); // Auto-approve projects
+        _approve(project, 0, "", ""); // Auto-approve projects
     }
 }
