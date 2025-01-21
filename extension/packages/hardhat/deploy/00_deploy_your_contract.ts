@@ -1,6 +1,5 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { Contract } from "ethers";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -22,14 +21,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("VoteToken", {
-    from: deployer,
-    // Contract constructor arguments
-    args: [],
-    log: true,
-    autoMine: true,
-  });
-
   await deploy("ERC20Mock", {
     from: deployer,
     // Contract constructor arguments
@@ -38,16 +29,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
-  const voteToken = await hre.ethers.getContract<Contract>("VoteToken", deployer);
-  const matchingToken = await hre.ethers.getContract<Contract>("ERC20Mock", deployer);
-  await deploy("AlloIRL", {
+  const owner = deployer; // Add your owner address here
+
+  await deploy("SimpleGrants", {
     from: deployer,
     // Contract constructor arguments
-    args: [
-      "0x0De636B654aEf4d426E35F6C49E9067ab2d7dEa9",
-      await voteToken.getAddress(),
-      await matchingToken.getAddress(),
-    ],
+    args: [owner],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
