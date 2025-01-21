@@ -1,5 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import { Contract } from "ethers";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -21,13 +22,11 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("SimpleGrants", {
+  await deploy("VoteToken", {
     from: deployer,
     // Contract constructor arguments
-    args: [deployer],
+    args: [],
     log: true,
-    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-    // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
   });
 
@@ -36,6 +35,22 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     // Contract constructor arguments
     args: [],
     log: true,
+    autoMine: true,
+  });
+
+  const voteToken = await hre.ethers.getContract<Contract>("VoteToken", deployer);
+  const matchingToken = await hre.ethers.getContract<Contract>("ERC20Mock", deployer);
+  await deploy("AlloIRL", {
+    from: deployer,
+    // Contract constructor arguments
+    args: [
+      "0x0De636B654aEf4d426E35F6C49E9067ab2d7dEa9",
+      await voteToken.getAddress(),
+      await matchingToken.getAddress(),
+    ],
+    log: true,
+    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+    // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
   });
 
@@ -74,4 +89,4 @@ export default deployYourContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["SimpleGrants"];
+deployYourContract.tags = ["AlloIRL"];

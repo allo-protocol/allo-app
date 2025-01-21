@@ -13,7 +13,7 @@ Allo Kit gets you up and running building Allocation Strategies in no time!
 Create `.env.local` files for both the allo app and the indexer.
 
 ```sh
-cp packages/app/.env.sample packages/app/.env.local
+cp packages/allo-app/.env.sample packages/allo-app/.env.local
 cp packages/allo-indexer/.env.sample packages/allo-indexer/.env.local
 ```
 

@@ -7,11 +7,7 @@ interface ITokenBalance {
 }
 
 contract TokenGate {
-    modifier onlyToken(
-        address token,
-        address account,
-        uint256 amount
-    ) {
+    modifier onlyToken(address token, address account, uint256 amount) {
         require(ITokenBalance(token).balanceOf(account) >= amount, "Insufficient balance");
         _;
     }

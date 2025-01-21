@@ -3,11 +3,9 @@
 pragma solidity ^0.8.20;
 
 interface IEASIndexer {
-    function getSchemaAttesterRecipientAttestationUIDCount(
-        bytes32 schemaUID,
-        address attester,
-        address account
-    ) external returns (uint256);
+    function getSchemaAttesterRecipientAttestationUIDCount(bytes32 schemaUID, address attester, address account)
+        external
+        returns (uint256);
 }
 
 contract EASGate {
@@ -19,11 +17,7 @@ contract EASGate {
         easIndexerAddress = IEASIndexer(_easIndexerAddress);
     }
 
-    modifier onlyEAS(
-        address account,
-        bytes32 _schemaUID,
-        address _attester
-    ) {
+    modifier onlyEAS(bytes32 _schemaUID, address _attester, address account) {
         require(
             // TODO: This will likely return revoked attestations also.
             // If so we need to check easRegistry.getAttestation(id).revoked == false
