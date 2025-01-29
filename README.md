@@ -2,6 +2,8 @@
 
 Allo Kit gets you up and running building Allocation Strategies in no time!
 
+> Please see this for now: https://github.com/allocapital/allo-kit-simple-grants
+
 ## Installation
 
 `npx create-eth@latest -e allocapital/allo-kit`
